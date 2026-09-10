@@ -1,5 +1,5 @@
-# Placement Data Analysis System - Version 1.1
-# Features: Student data, average package calculation
+# Placement Data Analysis System - Version 2.0
+# Features: Student data, average package, branch-wise analysis
 
 students = []
 
@@ -9,27 +9,56 @@ def add_student(name, branch, package):
         "branch": branch,
         "package": package
     })
-    print("Student data added successfully.")
 
 def display_students():
-    print("\nPlacement Data:")
+    print("\n--- Placement Data ---")
     for student in students:
-        print(student["name"], "-", student["branch"],
-              "-", student["package"], "LPA")
+        print(
+            "Name:", student["name"],
+            "| Branch:", student["branch"],
+            "| Package:", student["package"], "LPA"
+        )
 
 def calculate_average_package():
-    if len(students) == 0:
-        print("No data available.")
+    if not students:
+        print("No placement data available.")
         return
 
     total = sum(student["package"] for student in students)
     average = total / len(students)
 
-    print("Average Package =", average, "LPA")
+    print("\nOverall Average Package:", round(average, 2), "LPA")
 
+def branch_analysis():
+    branches = {}
+
+    for student in students:
+        branch = student["branch"]
+
+        if branch not in branches:
+            branches[branch] = []
+
+        branches[branch].append(student["package"])
+
+    print("\n--- Branch-wise Analysis ---")
+
+    for branch, packages in branches.items():
+        average = sum(packages) / len(packages)
+        highest = max(packages)
+
+        print("Branch:", branch)
+        print("Students Placed:", len(packages))
+        print("Average Package:", round(average, 2), "LPA")
+        print("Highest Package:", highest, "LPA")
+        print()
+
+# Sample data
 add_student("Rahul", "Computer", 6.5)
 add_student("Aman", "IT", 8.0)
 add_student("Sameer", "Computer", 10.0)
+add_student("Zaid", "Mechanical", 5.5)
+add_student("Rohan", "IT", 7.0)
 
 display_students()
 calculate_average_package()
+branch_analysis()
